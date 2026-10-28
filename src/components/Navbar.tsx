@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Terminal, Shield, Award, Users, Bot, Zap } from "lucide-react";
+import { Terminal, Shield, Award, Users, Bot, Zap, MessageSquare } from "lucide-react";
 import { useState } from "react";
 
 export function Navbar() {
@@ -25,14 +25,14 @@ export function Navbar() {
             <div className="flex items-center gap-1.5 font-bold tracking-wider text-slate-100">
               <span className="text-emerald-400 text-lg">HACKER</span>
               <span className="text-slate-100 text-lg">CRAFT</span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-400 font-mono">v1.0</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-400 font-mono">v1.1</span>
             </div>
             <span className="text-[10px] text-slate-500 font-mono tracking-tight">PRACTICAL CYBERSECURITY LABS</span>
           </div>
         </Link>
 
         {/* Navigation Links */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
           <Link href="/trilhas" className="flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-colors">
             <Shield className="h-4 w-4 text-emerald-400" />
             Trilhas & Labs
@@ -40,6 +40,10 @@ export function Navbar() {
           <Link href="/desafios" className="flex items-center gap-2 text-slate-300 hover:text-cyan-400 transition-colors">
             <Zap className="h-4 w-4 text-cyan-400" />
             CTF & Desafios
+          </Link>
+          <Link href="/forum" className="flex items-center gap-2 text-slate-300 hover:text-emerald-300 transition-colors">
+            <MessageSquare className="h-4 w-4 text-emerald-400" />
+            Fórum Underground
           </Link>
           <Link href="/ranking" className="flex items-center gap-2 text-slate-300 hover:text-amber-400 transition-colors">
             <Award className="h-4 w-4 text-amber-400" />
