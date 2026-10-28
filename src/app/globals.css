@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+:root {
+  --background: #090a0f;
+  --foreground: #e2e8f0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-mono), monospace, system-ui;
+  overflow-x: hidden;
+}
+
+/* Custom Cyberpunk & Terminal Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090a0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}
+
+/* Grid Background Effect */
+.cyber-grid {
+  background-size: 36px 36px;
+  background-image: 
+    linear-gradient(to right, rgba(30, 41, 59, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
+}
+
+/* Terminal Glow Effects */
+.terminal-glow-green {
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.box-glow-green {
+  box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.2);
+}
+
+.box-glow-cyan {
+  box-shadow: 0 0 20px -3px rgba(6, 182, 212, 0.2);
+}
+
+.box-glow-red {
+  box-shadow: 0 0 20px -3px rgba(244, 63, 94, 0.2);
+}
