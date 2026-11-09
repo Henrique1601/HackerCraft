@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Terminal, Shield, Award, Bot, Zap, MessageSquare, Flame } from "lucide-react";
+import { Terminal, Shield, Award, Bot, Zap, MessageSquare, Flame, ShieldAlert } from "lucide-react";
 import { useUserProgress } from "@/context/ProgressContext";
 
 export function Navbar() {
@@ -32,18 +32,22 @@ export function Navbar() {
         </Link>
 
         {/* Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
+        <nav className="hidden lg:flex items-center gap-5 text-sm font-medium">
           <Link href="/trilhas" className="flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-colors">
             <Shield className="h-4 w-4 text-emerald-400" />
             Trilhas & Labs
           </Link>
+          <Link href="/malware-lab" className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-950/50 border border-rose-500/30 text-rose-300 hover:text-rose-200 hover:border-rose-400 transition-colors">
+            <ShieldAlert className="h-4 w-4 text-rose-400" />
+            Scripts & Malwares (Ataque/Defesa)
+          </Link>
           <Link href="/desafios" className="flex items-center gap-2 text-slate-300 hover:text-cyan-400 transition-colors">
             <Zap className="h-4 w-4 text-cyan-400" />
-            CTF & Desafios
+            CTF
           </Link>
           <Link href="/forum" className="flex items-center gap-2 text-slate-300 hover:text-emerald-300 transition-colors">
             <MessageSquare className="h-4 w-4 text-emerald-400" />
-            Fórum Underground
+            Fórum
           </Link>
           <Link href="/ranking" className="flex items-center gap-2 text-slate-300 hover:text-amber-400 transition-colors">
             <Award className="h-4 w-4 text-amber-400" />
@@ -51,7 +55,7 @@ export function Navbar() {
           </Link>
           <Link href="/tutor" className="flex items-center gap-2 text-slate-300 hover:text-purple-400 transition-colors">
             <Bot className="h-4 w-4 text-purple-400" />
-            AI Hacker Tutor
+            AI Tutor
           </Link>
         </nav>
 
@@ -77,11 +81,11 @@ export function Navbar() {
           </div>
 
           <Link
-            href="/trilhas"
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-[0_0_12px_rgba(16,185,129,0.3)] hover:shadow-[0_0_18px_rgba(16,185,129,0.5)]"
+            href="/malware-lab"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold bg-rose-600 hover:bg-rose-500 text-white transition-all shadow-[0_0_12px_rgba(225,29,72,0.3)] hover:shadow-[0_0_18px_rgba(225,29,72,0.5)]"
           >
             <Flame className="h-3.5 w-3.5" />
-            ACESSAR LAB
+            THREAT LAB
           </Link>
         </div>
 

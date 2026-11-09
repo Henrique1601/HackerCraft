@@ -14,3 +14,9 @@
 - **Status:** Ativo
 - **Contexto:** Assistência e dicas contextuais de hacking guiado via Gemini.
 - **Decisão:** Rotas de API estruturadas via `@google/genai` com respostas estritas e tratamento de fallback para evitar alucinações técnicas.
+
+
+## ADR-005: Hub Dual de Engenharia de Ameaças & Defesa (Red Team vs Blue Team)
+- **Status:** Ativo
+- **Contexto:** Necessidade pedagógica de ensinar como scripts ofensivos e malwares funcionam na prática, conectando obrigatoriamente a cada vetor de ataque sua respectiva contramedida defensiva (Regras YARA, Regras Sigma, telemetria Sysmon, interceptação em EDR e passos de hardening).
+- **Decisão:** Criação da rota `/malware-lab` com visualização dual e módulos interativos (`Process Hollowing`, `Ransomware PoC`, `Reverse Shell PowerShell`, `Keylogger WinAPI`). Cada módulo expõe o código educacional, indicadores de comprometimento (IOCs) e contramedidas defensivas aplicadas.
