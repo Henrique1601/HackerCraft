@@ -4,7 +4,12 @@ import { useState } from "react";
 import { Challenge } from "@/data/tracks";
 import { InteractiveTerminal } from "@/components/InteractiveTerminal";
 import { WebVulnerabilitySandbox } from "@/components/WebVulnerabilitySandbox";
+import { CommandInjectionSandbox } from "@/components/CommandInjectionSandbox";
+import { ReverseEngineeringSandbox } from "@/components/ReverseEngineeringSandbox";
+import { CryptoSandbox } from "@/components/CryptoSandbox";
+import { IdorSsrfSandbox } from "@/components/IdorSsrfSandbox";
 import { AiHackerTutor } from "@/components/AiHackerTutor";
+import { useUserProgress } from "@/context/ProgressContext";
 import confetti from "canvas-confetti";
 import { 
   ShieldAlert, Award, Lightbulb, CheckCircle2, ChevronRight, 
@@ -18,8 +23,11 @@ interface LabWorkspaceProps {
 }
 
 export function LabWorkspace({ challenge, trackTitle }: LabWorkspaceProps) {
+  const { isChallengeCompleted, completeChallenge } = useUserProgress();
+  const alreadyCompleted = isChallengeCompleted(challenge.id);
+
   const [flagInput, setFlagInput] = useState("");
-  const [isSolved, setIsSolved] = useState(false);
+  const [isSolved, setIsSolved] = useState(alreadyCompleted);
   const [activeTab, setActiveTab] = useState<"workspace" | "tutor">("workspace");
   const [showHints, setShowHints] = useState(false);
   const [submittedError, setSubmittedError] = useState(false);
@@ -35,14 +43,15 @@ export function LabWorkspace({ challenge, trackTitle }: LabWorkspaceProps) {
     if (flagToValidate.trim() === challenge.flag) {
       setIsSolved(true);
       setSubmittedError(false);
+      completeChallenge(challenge.id, challenge.xp);
       try {
         confetti({
-          particleCount: 100,
-          spread: 70,
+          particleCount: 120,
+          spread: 80,
           origin: { y: 0.6 }
         });
       } catch (e) {
-        // Safe fallback
+        // Fallback seguro
       }
     } else {
       setSubmittedError(true);
@@ -104,7 +113,7 @@ export function LabWorkspace({ challenge, trackTitle }: LabWorkspaceProps) {
               <span className="text-xs font-mono px-2.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-cyan-400 font-bold">
                 {challenge.category} • {challenge.difficulty}
               </span>
-              {isSolved && (
+              {(isSolved || alreadyCompleted) && (
                 <span className="inline-flex items-center gap-1 text-xs font-mono font-bold text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-500/40">
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   CONCLUÍDO
@@ -181,7 +190,7 @@ export function LabWorkspace({ challenge, trackTitle }: LabWorkspaceProps) {
                 </div>
               )}
 
-              {isSolved ? (
+              {isSolved || alreadyCompleted ? (
                 <div className="p-4 rounded-xl bg-emerald-950/60 border border-emerald-500/50 flex items-center justify-between">
                   <div className="flex items-center gap-2 text-emerald-300 font-mono text-xs font-bold">
                     <CheckCircle2 className="h-5 w-5 text-emerald-400" />
@@ -226,6 +235,34 @@ export function LabWorkspace({ challenge, trackTitle }: LabWorkspaceProps) {
 
               {challenge.interactiveType === "web_vulnerability" && (
                 <WebVulnerabilitySandbox
+                  onFlagFound={handleFlagFound}
+                  expectedFlag={challenge.flag}
+                />
+              )}
+
+              {challenge.interactiveType === "command_injection" && (
+                <CommandInjectionSandbox
+                  onFlagFound={handleFlagFound}
+                  expectedFlag={challenge.flag}
+                />
+              )}
+
+              {challenge.interactiveType === "reverse_engineering" && (
+                <ReverseEngineeringSandbox
+                  onFlagFound={handleFlagFound}
+                  expectedFlag={challenge.flag}
+                />
+              )}
+
+              {challenge.interactiveType === "crypto" && (
+                <CryptoSandbox
+                  onFlagFound={handleFlagFound}
+                  expectedFlag={challenge.flag}
+                />
+              )}
+
+              {challenge.interactiveType === "idor_ssrf" && (
+                <IdorSsrfSandbox
                   onFlagFound={handleFlagFound}
                   expectedFlag={challenge.flag}
                 />

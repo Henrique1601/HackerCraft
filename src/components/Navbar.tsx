@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Terminal, Shield, Award, Users, Bot, Zap, MessageSquare } from "lucide-react";
-import { useState } from "react";
+import { Terminal, Shield, Award, Bot, Zap, MessageSquare, Flame } from "lucide-react";
+import { useUserProgress } from "@/context/ProgressContext";
 
 export function Navbar() {
-  const [userXp] = useState(750);
-  const [level] = useState(3);
+  const { profile } = useUserProgress();
+  const xpPercentage = Math.min(100, Math.round((profile.currentXp / profile.nextLevelXp) * 100));
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-emerald-950/60 bg-[#090a0f]/90 backdrop-blur-md">
@@ -25,7 +25,7 @@ export function Navbar() {
             <div className="flex items-center gap-1.5 font-bold tracking-wider text-slate-100">
               <span className="text-emerald-400 text-lg">HACKER</span>
               <span className="text-slate-100 text-lg">CRAFT</span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-400 font-mono">v1.1</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-emerald-400 font-mono">v1.2</span>
             </div>
             <span className="text-[10px] text-slate-500 font-mono tracking-tight">PRACTICAL CYBERSECURITY LABS</span>
           </div>
@@ -59,14 +59,20 @@ export function Navbar() {
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex flex-col items-end text-xs font-mono">
             <div className="flex items-center gap-2 text-slate-300">
-              <span className="text-slate-400">LVL {level}</span>
-              <span className="font-semibold text-emerald-400">neo_operator</span>
+              <span className="px-1.5 py-0.5 rounded bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-[10px]">
+                LVL {profile.level}
+              </span>
+              <span className="font-semibold text-emerald-400">{profile.handle}</span>
+              <span className="text-[10px] text-slate-400">({profile.currentXp} XP)</span>
             </div>
-            <div className="w-28 h-1.5 bg-slate-800 rounded-full overflow-hidden mt-1 border border-slate-700/50">
-              <div 
-                className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full"
-                style={{ width: `${(userXp / 1500) * 100}%` }}
-              />
+            <div className="flex items-center gap-2 mt-1">
+              <div className="w-28 h-1.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700/50">
+                <div 
+                  className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full transition-all duration-500"
+                  style={{ width: `${xpPercentage}%` }}
+                />
+              </div>
+              <span className="text-[10px] text-slate-500">{xpPercentage}%</span>
             </div>
           </div>
 
@@ -74,7 +80,7 @@ export function Navbar() {
             href="/trilhas"
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition-all shadow-[0_0_12px_rgba(16,185,129,0.3)] hover:shadow-[0_0_18px_rgba(16,185,129,0.5)]"
           >
-            <Terminal className="h-3.5 w-3.5" />
+            <Flame className="h-3.5 w-3.5" />
             ACESSAR LAB
           </Link>
         </div>

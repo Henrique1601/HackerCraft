@@ -27,7 +27,7 @@ export interface Challenge {
   slug: string;
   title: string;
   difficulty: "Fácil" | "Médio" | "Difícil" | "Insano";
-  category: "Web" | "Scripting" | "Malware" | "Reversing" | "Network" | "Blue Team";
+  category: "Web" | "Scripting" | "Malware" | "Reversing" | "Network" | "Blue Team" | "Crypto";
   xp: number;
   description: string;
   objective: string;
@@ -36,7 +36,7 @@ export interface Challenge {
   language?: "python" | "bash" | "c" | "sql";
   hints: string[];
   flag: string;
-  interactiveType: "terminal" | "code_editor" | "web_vulnerability";
+  interactiveType: "terminal" | "code_editor" | "web_vulnerability" | "command_injection" | "reverse_engineering" | "crypto" | "idor_ssrf";
 }
 
 export const TRACKS: Track[] = [
@@ -72,7 +72,7 @@ export const TRACKS: Track[] = [
             terminalInitialText: "hacker@kali:~$ # Digite 'help' para ver os comandos disponíveis\nhacker@kali:~$ ",
             interactiveType: "terminal",
             hints: [
-              "Tente usar 'nmap -sS -p- 10.10.13.37' ou use 'scan 10.10.13.37'.",
+              "Tente usar 'nmap 10.10.13.37' ou use 'scan 10.10.13.37'.",
               "Após encontrar a porta aberta (ex: 8888), use 'nc 10.10.13.37 <porta>' para ler o banner."
             ],
             flag: "FLAG{nmap_stealth_recon_mastered_2026}"
@@ -86,11 +86,11 @@ export const TRACKS: Track[] = [
     slug: "web-pentest",
     title: "02. Web Pentesting & OWASP Top 10",
     subtitle: "Infiltração em aplicações modernas",
-    description: "Explore as maiores falhas da web na prática: SQL Injection, Cross-Site Scripting (XSS), Quebra de Autenticação, SSRF e execução remota de código.",
+    description: "Explore as maiores falhas da web na prática: SQL Injection, Cross-Site Scripting (XSS), Quebra de Autenticação, SSRF, IDOR e execução remota de código.",
     badge: "WEB BREAKER",
     color: "from-cyan-500 to-blue-500",
     totalModules: 6,
-    totalXp: 2400,
+    totalXp: 2800,
     difficulty: "Intermediário",
     icon: "Globe",
     modules: [
@@ -116,6 +116,56 @@ export const TRACKS: Track[] = [
               "Se o username fechar a aspa e adicionar uma condição sempre verdadeira com comentário (ex: admin' OR '1'='1' --), a senha será ignorada!"
             ],
             flag: "FLAG{sqli_auth_bypass_admin_pwned}"
+          }
+        ]
+      },
+      {
+        id: "mod-cmd-injection",
+        title: "Remote Code Execution (RCE) via Command Injection Multi-Stack",
+        duration: "55 min",
+        xp: 450,
+        description: "Explore injeção de comandos de sistema operacional em diferentes linguagens e backends: PHP (shell_exec), Node.js (exec), Python (subprocess) e Bash (eval).",
+        challenges: [
+          {
+            id: "chal-cmd-injection",
+            slug: "command-injection-multistack",
+            title: "RCE Polyglot: Evasão e Encadeamento de Comandos",
+            difficulty: "Médio",
+            category: "Web",
+            xp: 250,
+            description: "A aplicação web disponibiliza um utilitário de teste de conectividade (ping) vulnerável em múltiplas stacks de backend.",
+            objective: "Utilize operadores de concatenação de comando (; ou &&) para listar os arquivos e ler /etc/passwd ou /secret_flag.txt.",
+            interactiveType: "command_injection",
+            hints: [
+              "Tente injetar '8.8.8.8; cat /etc/passwd' ou '127.0.0.1 && whoami'.",
+              "Alterne entre as abas PHP, Node.js, Python e Bash para observar como cada runtime se comporta."
+            ],
+            flag: "FLAG{rce_polyglot_command_injection_pwned_2026}"
+          }
+        ]
+      },
+      {
+        id: "mod-idor-ssrf",
+        title: "Controle de Acesso Quebrado & SSRF em Nuvem",
+        duration: "50 min",
+        xp: 450,
+        description: "Explore falhas de autorização de objetos em APIs REST (IDOR) e requisições forjadas do lado do servidor (SSRF) para exfiltrar credenciais de instâncias na nuvem.",
+        challenges: [
+          {
+            id: "chal-idor-ssrf",
+            slug: "idor-broken-object-auth",
+            title: "Escalação Horizontal (IDOR) & Metadados Cloud (SSRF)",
+            difficulty: "Médio",
+            category: "Web",
+            xp: 250,
+            description: "Descubra como parâmetros manipuláveis expõem contas administrativas e como webhooks internos acessam o IP 169.254.169.254.",
+            objective: "Altere o ID do usuário para '1' na aba IDOR ou consulte os metadados de credencial AWS na aba SSRF para resgatar a flag.",
+            interactiveType: "idor_ssrf",
+            hints: [
+              "No laboratório IDOR, teste IDs sequenciais como 1 (geralmente reservado ao SuperAdmin).",
+              "No laboratório SSRF, a URL interna da AWS IAM metadata reside em http://169.254.169.254/latest/meta-data/iam/security-credentials/"
+            ],
+            flag: "FLAG{idor_privilege_escalation_and_metadata_ssrf_pwned}"
           }
         ]
       }
@@ -238,11 +288,11 @@ int main() {
     slug: "reversing-binarios",
     title: "05. Engenharia Reversa & Binários (Pwn)",
     subtitle: "Dissecando arquivos binários e exploração de memória",
-    description: "Compreenda código em Assembly x86/x64, use descompiladores como Ghidra, explore Buffer Overflows e entenda proteções como NX/DEP, ASLR e Canary.",
+    description: "Compreenda código em Assembly x86/x64, ARM64, WebAssembly e Bytecode JVM/Android. Use descompiladores como Ghidra e explore rotinas de validação de licença.",
     badge: "BINARY REVERSER",
     color: "from-purple-500 to-indigo-600",
     totalModules: 5,
-    totalXp: 3200,
+    totalXp: 3600,
     difficulty: "Expert",
     icon: "Cpu",
     modules: [
@@ -271,13 +321,78 @@ int main() {
             flag: "FLAG{rip_overwritten_jump_to_secret_admin_pwned}"
           }
         ]
+      },
+      {
+        id: "mod-polyglot-reversing",
+        title: "Engenharia Reversa Multi-Arquitetura (x86_64, ARM64, WASM e JVM)",
+        duration: "70 min",
+        xp: 500,
+        description: "Analise a mesma lógica de validação de licença descompilada em 4 tecnologias diferentes: Assembly x86_64 Intel, AArch64 ARM (Apple Silicon/Android), WebAssembly WAT e Smali/Bytecode JVM.",
+        challenges: [
+          {
+            id: "chal-polyglot-reversing",
+            slug: "polyglot-reverse-engineering",
+            title: "Quebra de Licença Multi-Arquitetura (x64 / ARM / WASM / JVM)",
+            difficulty: "Difícil",
+            category: "Reversing",
+            xp: 350,
+            description: "Um software de proteção proprietário foi compilado para múltiplos alvos de arquitetura. Examine os opcodes de cada uma para deduzir a senha de validação.",
+            objective: "Identifique os caracteres ASCII comparados nas instruções cmp / bipush / i32.const e submeta a chave para liberar a flag.",
+            interactiveType: "reverse_engineering",
+            hints: [
+              "Observe os valores hexadecimais: 0x48 = 'H', 0x34 = '4', 0x43 = 'C', 0x4B = 'K'.",
+              "A chave possui 4 caracteres. Teste-a no descompilador interativo!"
+            ],
+            flag: "FLAG{rev_polyglot_arm_wasm_x64_master_2026}"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "criptografia-ctf",
+    slug: "criptografia-ctf",
+    title: "06. Criptoanálise & Quebra de Chaves",
+    subtitle: "Ataques a cifras modernas e clássicas",
+    description: "Compreenda como chaves mal geradas destroem a confidencialidade: fatoração RSA com Wiener/Fermat, quebra de XOR de chave repetida e análise de entropia.",
+    badge: "CRYPTO CRACKER",
+    color: "from-amber-500 to-yellow-600",
+    totalModules: 4,
+    totalXp: 2200,
+    difficulty: "Avançado",
+    icon: "KeyRound",
+    modules: [
+      {
+        id: "mod-rsa-weak-keys",
+        title: "Fatoração de Chave Pública RSA Fraca",
+        duration: "50 min",
+        xp: 400,
+        description: "Entenda o cálculo de chaves privadas RSA (p, q, phi, d) e descubra como recuperar o expoente d quando o módulo n é fatorável.",
+        challenges: [
+          {
+            id: "chal-rsa-crack",
+            slug: "rsa-weak-keys-factorization",
+            title: "Ataque à Chave RSA com Módulo Reduzido",
+            difficulty: "Médio",
+            category: "Crypto",
+            xp: 300,
+            description: "Um serviço bancário legado utilizou um par de chaves RSA com parâmetros pequenos de módulo n = 3233.",
+            objective: "Fatore n em dois primos p e q, calcule o expoente privado d e obtenha a flag descriptografada.",
+            interactiveType: "crypto",
+            hints: [
+              "3233 é o produto de dois primos próximos a 50 e 60.",
+              "Teste 61 e 53: 61 * 53 = 3233!"
+            ],
+            flag: "FLAG{rsa_wiener_attack_small_private_exponent_cracked}"
+          }
+        ]
       }
     ]
   },
   {
     id: "blue-team-forense",
     slug: "blue-team-forense",
-    title: "06. Blue Team, SOC & Análise Forense",
+    title: "07. Blue Team, SOC & Análise Forense",
     subtitle: "Caça a ameaças, regras YARA e remoção de vírus",
     description: "O verdadeiro hacker também sabe defender e caçar invasores. Aprenda a escrever regras YARA para detectar vírus, analisar dumps de memória e erradicar persistências.",
     badge: "SOC HUNTER",
